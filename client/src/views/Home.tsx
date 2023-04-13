@@ -15,7 +15,7 @@ const Home = () => {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [fooEvents, setFooEvents] = useState([]);
 
-
+  console.log("albert")
 
   useEffect(() => {
     dispatch(getUserByCookie());

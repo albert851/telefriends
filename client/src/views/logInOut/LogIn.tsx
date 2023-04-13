@@ -27,7 +27,6 @@ const Login = () => {
 
   async function handleSubmit(ev: any) {
     try {
-      console.log("login")
       ev.preventDefault();
       const { data } = await axios.post("/api/users/login", {
         email,
