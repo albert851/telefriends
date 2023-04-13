@@ -1,0 +1,48 @@
+
+@import "./views/home.scss";
+@import "./components/headerStyle.scss";
+@import "./views/logInOut/login.scss";
+@import "./views/logInOut/register.scss";
+@import "./components/search.scss";
+@import "./components/friendList.scss";
+@import "./components/friend.scss";
+@import "./components/main.scss";
+@import "./components/navBar.scss";
+
+$color1: #F5F7FB;
+
+body{
+  background-color: $color1;
+  overflow: hidden;
+}
+
+.App {
+  text-align: center;
+}
+
+.page__container {
+  display: grid;
+  height: 100vh;
+  width: 100vw;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-areas:
+    "header header header header header"
+    "home home home home home"
+    "home home home home home"
+    "home home home home home"
+    "home home home home home"
+    "home home home home home"
+}
+
+.header__grid{
+  grid-area: header;
+}
+
+.home__grid {
+  grid-area: home;
+} 
+
+// .logInOut__grid {
+//     grid-area: 3/3/4/4;
+//   }
