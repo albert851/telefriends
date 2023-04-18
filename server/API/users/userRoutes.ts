@@ -5,6 +5,7 @@ import {
   register,
   getUser,
   logout,
+  getUserById,
   updateConnectionStatus,
 } from "./userCtrl";
 
@@ -14,6 +15,7 @@ router
   .get("", getAllUsers)
   .get("/get-user-by-cookie", getUser)
   .get("/logout", logout)
+  .get("/:id", getUserById)
   .post("/login", login)
   .post("/register", register)
   .patch("/login/:id", updateConnectionStatus)

@@ -37,8 +37,18 @@ const Logout: FC <LogoutProps> = ({user}) => {
       const { data } = await axios.get("/api/users/logout");
       const { logout } = data;
       if (logout) {
+        handleCloseRoom();
         navigate("/login");
       }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function handleCloseRoom() {
+    try {
+      console.log("close room");
+      const { data } = await axios.get("/api/rooms/closeRoom");
     } catch (error) {
       console.error(error);
     }

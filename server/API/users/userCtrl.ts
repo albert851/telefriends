@@ -2,6 +2,7 @@ import express from "express";
 import UserModel, { UserValidation } from "./userModel";
 import bcrypt from "bcrypt";
 import jwt from "jwt-simple";
+import socket from './../../../client/src/sockets/socket';
 const saltRounds = 10;
 
 export async function register(req: express.Request, res: express.Response) {
@@ -85,9 +86,11 @@ export async function getUser(req: express.Request, res: express.Response) {
 
     const { userID } = req.cookies;
     if (!userID) throw new Error("Couldn't find user from cookies");
+    
 
     const decodedUserId = jwt.decode(userID, secret);
     const { userId } = decodedUserId;
+
 
     const userDB = await UserModel.findById(userId);
     if (!userDB)
@@ -118,13 +121,22 @@ export async function getUserByCookie(req, res) {
 
 export async function updateConnectionStatus(req, res) {
   try {
-    const { connected } = req.body;
+    const { connected, socketID } = req.body;
     const userDB = await UserModel.findByIdAndUpdate(
       req.params.id,
-      { connected },
+      { connected, socketID },
       { new: true, runValidators: true }
     );
     res.send({ connected: true, userDB });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+}
+
+export async function getUserById(req, res) {
+  try {
+    const userDB = await UserModel.findById(req.params.id);
+    res.send({ userDB });
   } catch (error) {
     res.status(500).send({ error: error.message });
   }

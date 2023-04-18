@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Joi, { boolean } from "joi";
 import { joiPasswordExtendCore } from "joi-password";
+import socket from './../../../client/src/sockets/socket';
 
 const joiPassword = Joi.extend(joiPasswordExtendCore);
 
@@ -18,6 +19,10 @@ const UserSchema = new mongoose.Schema({
   connected: {
     type: Boolean,
     default: false,
+    required: false,
+  },
+  socketID: {
+    type: String,
     required: false,
   },
 });

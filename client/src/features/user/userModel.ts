@@ -3,4 +3,5 @@ export interface User {
     email: string,
     userName: string,
     connected: boolean,
+    socketID: string,
   }

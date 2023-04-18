@@ -9,13 +9,14 @@ const Login = () => {
   const [password, setPassword] = useState();
   const connected = true;
   const navigate = useNavigate();
-  console.log(socket)
 
   async function handleConnectionStatus(userData: any) {
     try {
       const userId = userData.userDB._id;
+      const socketID = socket.id;
       const { data } = await axios.patch(`/api/users/login/${userId}`, {
         connected,
+        socketID,
       });
       if (data.connected) {
         navigate("/home");

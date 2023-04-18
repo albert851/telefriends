@@ -31,6 +31,9 @@ app.use(cookieParser());
 import useRoutes from "./API/users/userRoutes";
 app.use("/api/users", useRoutes);
 
+import roomRoutes from "./API/rooms/roomRoutes";
+app.use("/api/rooms", roomRoutes);
+
 const io = new Server(httpServer, {
   cors: {
     origin: "http://localhost:3000",
@@ -40,6 +43,9 @@ const io = new Server(httpServer, {
 io.on("connection", (socket) => {
   console.log(`user cnnected: {socket.id}`);
   socket.emit("welcome", { message: "Welcome!" });
+  socket.on('ROOM:JOIN', (data) => {
+    socket.join(data.roomId);
+  })
   socket.on("send_message", (message) => {
     console.log(message);
     io.sockets.emit("send_message", message);

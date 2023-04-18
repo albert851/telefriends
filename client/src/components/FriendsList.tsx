@@ -1,27 +1,32 @@
 import React, { FC, useEffect, useState } from "react";
 import axios from "axios";
-import { useAppDispatch, useAppSelector } from "../../src/app/hooks";
-import { getUserByCookie } from "../../src/features/user/userApi";
-import { userSelector } from ".././features/user/user.Slise";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { userSelector } from "../features/user/userSlise";
+import { getUserByCookie } from "../features/user/userApi";
 import Friend from "./Friend";
 
 interface FriendsListProps {
   searchValue: any;
+  setRoom: any;
 }
 
-const FriendsList: FC<FriendsListProps> = ({ searchValue }) => {
-  const [friendsArray, setFriendsArray] = useState<any>([""]);
-  const dispatch = useAppDispatch();
+const FriendsList: FC<FriendsListProps> = ({ searchValue, setRoom }) => {
   const user = useAppSelector(userSelector);
+  const dispatch = useAppDispatch();
+  const [friendsArray, setFriendsArray] = useState<any>([""]);
+  const [friendsDisplayArray, setFriendsDisplayArray] = useState<any>([""]);
   const search = `^${searchValue}`;
+  const [loading, setLoading] = useState(true);
 
   async function getFriendList() {
     try {
       const { data } = await axios.get("/api/users");
 
       const friendsData = data.usersDB.filter(function (friend: any) {
-        return friend.userName != user?.userName;
+        return friend._id !== user?._id;
       });
+
+      setFriendsArray(data.usersDB);
 
       if (search === `^`) {
         setFriendsArray(friendsData);
@@ -31,6 +36,13 @@ const FriendsList: FC<FriendsListProps> = ({ searchValue }) => {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  function filterArray(arrayOfUsers: string[]) {
+    const friendsData = arrayOfUsers.filter(function (friend: any) {
+      return friend._id !== user?._id;
+    });
+    return friendsData;
   }
 
   const searchFunc = (friendsData: any) => {
@@ -46,22 +58,35 @@ const FriendsList: FC<FriendsListProps> = ({ searchValue }) => {
     setFriendsArray(friendsData);
 
     searchName.map((name: any) => {
-      setFriendsArray(friendsArray.filter(function(friend:any){
-        return friend.userName == name;
-      }))
+      setFriendsArray(
+        friendsArray.filter(function (friend: any) {
+          return friend.userName == name;
+        })
+      );
     });
   };
 
   useEffect(() => {
-    dispatch(getUserByCookie());
     getFriendList();
-  }, [search || user]);
+    setFriendsDisplayArray(friendsArray);
+  }, [search]);
+
+  useEffect(() => {
+    getFriendList();
+  }, []);
+
+  useEffect(() => {
+    const friendsData = filterArray(friendsArray);
+    setFriendsDisplayArray(friendsData);
+  }, [user]);
 
   return (
     <div className="friendsList">
-      {friendsArray.map((friend: any, index: React.Key | null | undefined) => {
-        return <Friend key={index} friend={friend} />;
-      })}
+      {friendsDisplayArray.map(
+        (friend: any, index: React.Key | null | undefined) => {
+          return <Friend key={index} friend={friend} setRoom={setRoom} />;
+        }
+      )}
     </div>
   );
 };

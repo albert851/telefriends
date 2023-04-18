@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from 'react'
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { getUserByCookie } from "../features/user/userApi";
-import { userSelector } from "../features/user/user.Slise";
-import Search from './Search';
-import FriendsList from './FriendsList';
+import React, { FC, useState, useEffect } from "react";
+import axios from "axios";
+import Search from "./Search";
+import FriendsList from "./FriendsList";
+import { getUserByCookie } from "./../features/user/userApi";
+import { useAppSelector } from "../app/hooks";
+import { userSelector } from "../features/user/userSlise";
 
-const NavBar = () => {
-    const dispatch = useAppDispatch();
-    const user = useAppSelector(userSelector);
-    const [username, setUsername] = useState<string>();
-    const [searchValue, setSearchValue] = useState("");
-  
-    useEffect(() => {
-      dispatch(getUserByCookie());
-      setUsername(user?.userName);
-    }, [user]);
-  return (
-    <div className="navBar navBar__grid">
-        <h4 className="navBar__username">{`Hello ${username}`}</h4>
-        <Search setSearchValue={setSearchValue} />
-        <FriendsList searchValue={searchValue} />
-    </div>
-  )
+interface NavBarProps {
+  setRoom: any
 }
 
-export default NavBar
+const NavBar: FC<NavBarProps> = ({ setRoom }) => {
+  const [username, setUsername] = useState<string>();
+  const [searchValue, setSearchValue] = useState("");
+  const user = useAppSelector(userSelector)
+  
+  return (
+    <div className="navBar navBar__grid">
+      <h4 className="navBar__username">{`Hello ${user?.userName}`}</h4>
+      <Search setSearchValue={setSearchValue} />
+      <FriendsList searchValue={searchValue} setRoom={setRoom} />
+    </div>
+  );
+};
+
+export default NavBar;

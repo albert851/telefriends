@@ -15,4 +15,9 @@ $color3: #A1A3A7;
         margin-right: 5px;
         margin-top: 10px;
     }
+
+    &:hover {
+        color: $color2;
+        text-decoration: underline;
+    }
 }

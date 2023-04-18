@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { getUserByCookie } from "../features/user/userApi";
-import { userSelector } from "../features/user/user.Slise";
 import Main from "../components/Main";
 import NavBar from "../components/NavBar";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { userSelector } from "../features/user/userSlise";
+import { getUserByCookie } from "../features/user/userApi";
 import socket from "../sockets/socket";
 
 const Home = () => {
+  const [newRooom, setNewRoom]= useState();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const user = useAppSelector(userSelector);
+  const dispatch = useAppDispatch();
+  const [roomId, setRoomId] = useState("");
   const [userSocketId, setUserSocetId] = useState("");
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [fooEvents, setFooEvents] = useState([]);
-
-  console.log("albert")
 
   useEffect(() => {
     dispatch(getUserByCookie());
@@ -49,22 +49,12 @@ const Home = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
-  }, [user]);
-
-  if (user) {
-    return (
-      <div className="home__container home__grid">
-        <NavBar />
-        <Main />
-      </div>
-    );
-  } else {
-    return <></>;
-  }
+  return (
+    <div className="home__container home__grid">
+      <NavBar setRoom={setNewRoom} />
+      <Main newRoom={newRooom} />
+    </div>
+  );
 };
 
 export default Home;

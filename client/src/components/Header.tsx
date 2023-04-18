@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { getUserByCookie } from "../features/user/userApi";
-import { userSelector } from "../features/user/user.Slise";
+import { userSelector } from "../features/user/userSlise";
 import { Link } from "react-router-dom";
 import Logout from "../views/logInOut/Logout";
 import {
