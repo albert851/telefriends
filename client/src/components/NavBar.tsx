@@ -7,7 +7,7 @@ import { useAppSelector } from "../app/hooks";
 import { userSelector } from "../features/user/userSlise";
 
 interface NavBarProps {
-  setRoom: any
+  setRoom: CallableFunction
 }
 
 const NavBar: FC<NavBarProps> = ({ setRoom }) => {

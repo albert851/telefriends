@@ -43,8 +43,10 @@ const io = new Server(httpServer, {
 io.on("connection", (socket) => {
   console.log(`user cnnected: {socket.id}`);
   socket.emit("welcome", { message: "Welcome!" });
-  socket.on('ROOM:JOIN', (data) => {
-    socket.join(data.roomId);
+  socket.on('ROOM:JOIN', (roomId, friendSocketId) => {
+    socket.join(roomId);
+    console.log('get')
+    socket.to(roomId).emit('ROOM:JOINED', friendSocketId)
   })
   socket.on("send_message", (message) => {
     console.log(message);
