@@ -9,12 +9,12 @@ export enum Status {
     FAILED = "failed"
 }
 
-export interface userState {
+export interface roomState {
     value: Room | null;
     status: Status;
 }
 
-const initialState: userState = {
+const initialState: roomState = {
     value: null,
     status: Status.IDLE,
 }

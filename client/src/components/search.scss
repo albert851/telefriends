@@ -10,4 +10,7 @@ $color3: #A1A3A7;
     border: none;
     color: $color3;
     margin-bottom: 10px;
+    &:focus {
+        outline: none;
+    }
 }

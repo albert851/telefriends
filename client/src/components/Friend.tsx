@@ -5,25 +5,30 @@ import { getUserByCookie } from "../../src/features/user/userApi";
 import { userSelector } from "../features/user/userSlise";
 import socket from "../sockets/socket";
 import { changeFriend } from "../features/friend/selectedFriend";
-
+import { User } from "../features/user/userModel";
 interface FriendProps {
-  friend: any;
-  setRoom: any;
+  friend: User;
 }
 
-const Friend: FC<FriendProps> = ({ friend, setRoom }) => {
+const Friend: FC<FriendProps> = ({ friend }) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(userSelector);
   const [friendName, setFriendName] = useState("");
   const [connected, setConnected] = useState<string>("red");
 
+  useEffect(() => {
+    setFriendName(friend.userName);
+    if (friend.connected == true) {
+      setConnected("green");
+      
+    }
+  }, [friend]);
+
   async function handleRoom(ev: any) {
     try {
       ev.preventDefault();
-      const roomUsers: string[] = [user?._id, friend._id];
-      const { data } = await axios.post("/api/rooms/newRoom", {
-        roomUsers,
-      });
+
+      await handleGetRoom();
 
       dispatch(
         changeFriend({
@@ -33,19 +38,41 @@ const Friend: FC<FriendProps> = ({ friend, setRoom }) => {
         })
       );
 
-      setRoom(friend._id);
     } catch (error) {
       console.error(error);
     }
   }
 
-  useEffect(() => {
-    setFriendName(friend.userName);
+  async function handleGetRoom() {
+    if (user) {
+      try {
+        const { data } = await axios.post("/api/rooms/room-by-users", {
+          userA: user._id,
+          userB: friend._id,
+        });
 
-    if (friend.connected == true) {
-      setConnected("green");
+        const { roomDB } = data;
+        if (!roomDB) {
+          handlenewRoom();
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
-  }, [friend]);
+  }
+
+  async function handlenewRoom() {
+    if (user) {
+      try {
+        const { data } = await axios.post("/api/rooms/newRoom", {
+          userA: user._id,
+          userB: friend._id,
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
 
   return (
     <p className="friend" onClick={handleRoom}>

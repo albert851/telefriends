@@ -6,12 +6,16 @@ import {
   faArrowRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useAppSelector } from "../../app/hooks";
+import { userSelector } from "../../features/user/userSlise";
 
-interface LogoutProps{
-  user: any;
+interface LogOutProps {
+  setDisp: CallableFunction;
+  disp: string;
 }
 
-const Logout: FC <LogoutProps> = ({user}) => {
+const Logout: FC<LogOutProps> = ({ disp, setDisp }) => {
+  const user = useAppSelector(userSelector);
   const navigate = useNavigate();
   const [dispLogout, setDispLogout] = useState("");
 
@@ -23,7 +27,6 @@ const Logout: FC <LogoutProps> = ({user}) => {
         connected,
       });
       if (data.connected) {
-        setDispLogout("none")
         handleLogout();
       }
     } catch (error) {
@@ -38,6 +41,7 @@ const Logout: FC <LogoutProps> = ({user}) => {
       const { logout } = data;
       if (logout) {
         handleCloseRoom();
+        setDisp("none");
         navigate("/login");
       }
     } catch (error) {
@@ -48,20 +52,20 @@ const Logout: FC <LogoutProps> = ({user}) => {
   async function handleCloseRoom() {
     try {
       console.log("close room");
-      const { data } = await axios.get("/api/rooms/closeRoom");
+      const { data } = await axios.get("/api/rooms/close");
     } catch (error) {
       console.error(error);
     }
   }
 
   useEffect(() => {
-    {user ? setDispLogout("block") : setDispLogout("none")}
+    {user ? setDisp("block") : setDisp("none")};
   }, [user]);
 
   return (
     <FontAwesomeIcon
       className="header__logOutIcon"
-      style={{ display: dispLogout }}
+      style={{ display: disp }}
       icon={faArrowRightFromBracket}
       onClick={handleConnectionStatus}
     />

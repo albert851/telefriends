@@ -2,29 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import socket from "../../sockets/socket";
+import socket from "../../sockets/socket"
 
 const Login = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const connected = true;
   const navigate = useNavigate();
-
-  async function handleConnectionStatus(userData: any) {
-    try {
-      const userId = userData.userDB._id;
-      const socketID = socket.id;
-      const { data } = await axios.patch(`/api/users/login/${userId}`, {
-        connected,
-        socketID,
-      });
-      if (data.connected) {
-        navigate("/home");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
 
   async function handleSubmit(ev: any) {
     try {
@@ -34,7 +17,7 @@ const Login = () => {
         password,
       });
       if (data.login) {
-        handleConnectionStatus(data);
+        navigate("/home");
       }
     } catch (error) {
       console.error(error);

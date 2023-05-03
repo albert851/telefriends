@@ -4,13 +4,13 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { userSelector } from "../features/user/userSlise";
 import { getUserByCookie } from "../features/user/userApi";
 import Friend from "./Friend";
+import socket from "../sockets/socket";
 
 interface FriendsListProps {
-  searchValue: any;
-  setRoom: any;
+  searchValue: string;
 }
 
-const FriendsList: FC<FriendsListProps> = ({ searchValue, setRoom }) => {
+const FriendsList: FC<FriendsListProps> = ({ searchValue }) => {
   const user = useAppSelector(userSelector);
   const dispatch = useAppDispatch();
   const [friendsArray, setFriendsArray] = useState<any>([""]);
@@ -80,11 +80,15 @@ const FriendsList: FC<FriendsListProps> = ({ searchValue, setRoom }) => {
     setFriendsDisplayArray(friendsData);
   }, [user]);
 
+  React.useEffect(()=>{
+    socket.emit('ROOM:JOINED', friendsArray)
+  },[])
+
   return (
     <div className="friendsList">
       {friendsDisplayArray.map(
         (friend: any, index: React.Key | null | undefined) => {
-          return <Friend key={index} friend={friend} setRoom={setRoom} />;
+          return <Friend key={index} friend={friend} />;
         }
       )}
     </div>

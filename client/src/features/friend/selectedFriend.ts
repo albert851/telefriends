@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import socket from './../../sockets/socket';
+import socket from "./../../sockets/socket";
 
 export interface SelectefFrienddState {
   id: string;
@@ -11,7 +11,7 @@ export interface SelectefFrienddState {
 const initialState: SelectefFrienddState = {
   id: "",
   socketID: "",
-  name: ""
+  name: "",
 };
 
 export const selectedFriendSlice = createSlice({

@@ -1,19 +1,21 @@
+import { string } from "joi";
 import mongoose from "mongoose";
 
 const MessageSchema = new mongoose.Schema({
-    Sender: {
-        type: mongoose.Schema.Types.ObjectId,
+    senderId: {
+        type: String,
         require: true,
     },
-    room: {
-        type: mongoose.Schema.Types.ObjectId,
+    roomId: {
+        type: String,
         require: true,
     },
     message: {
         type: String,
         require: true,
-    }
-});
+    },
+  
+}, {timestamps: true});
 
 const MessageModel = mongoose.model("message", MessageSchema);
 

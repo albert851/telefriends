@@ -1,31 +1,21 @@
-import React, { FC, useState, useEffect } from "react";
-import axios from "axios";
-import {
-  faComments,
-  faArrowRightFromBracket,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useEffect } from "react";
 import Room from "./Room";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { getRoomByCookie } from "../features/room/roomApi";
 import { roomSelector } from "../features/room/roomSlise";
 import { roomSlice } from "./../features/room/roomSlise";
-import { current } from "@reduxjs/toolkit";
-interface MainProps {
-  newRoom: any;
-}
+import { friendSelector } from "../features/friend/selectedFriend";
 
-const Main: FC<MainProps> = ({ newRoom }) => {
+const Main = () => {
   const room = useAppSelector(roomSelector);
-  const [currentRoomId, setCurrentRoomId] = useState<string>();
-  const [newRoomId, setNewRoomId] = useState<string>();
+  const friend = useAppSelector(friendSelector)
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getRoomByCookie());
-  }, [newRoom]);
+  }, [friend]);
 
-  if (!room) {
+  if (room == null) {
     return <div className="main main__grid"></div>;
   } else {
     return (

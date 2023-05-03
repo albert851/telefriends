@@ -5,6 +5,8 @@ import Login from './views/logInOut/LogIn';
 import Register from './views/logInOut/Register';
 import Page from './views/Page';
 import Home from './views/Home';
+import { render } from '@testing-library/react';
+import socket from './sockets/socket';
 
 
 function App() {
